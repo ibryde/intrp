@@ -1,0 +1,12 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/mnt/c/Users/daucr/Desktop/epita/sit/Advanced OS and Virtualization/disassembler'
+cc    -c -o main.o main.c
+ 
+cc    -c -o basics.o basics.c
+cc    -c -o operations.o operations.c
+ 
+cc    -c -o tools.o tools.c
+cc    -c -o parser.o parser.c
+cc   main.o basics.o operations.o tools.o parser.o   -o main
+make: Leaving directory '/mnt/c/Users/daucr/Desktop/epita/sit/Advanced OS and Virtualization/disassembler'
+ 
