@@ -1,5 +1,5 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'basics.o', needed by 'main'.  Stop.
+make: *** No rule to make target 'syscall.o', needed by 'intrp'.  Stop.
 
 # GNU Make 4.2.1
 # Built for x86_64-pc-linux-gnu
@@ -8,7 +8,7 @@ make: *** No rule to make target 'basics.o', needed by 'main'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun Jul 17 11:46:35 2022
+# Make data base, printed on Mon Jul 18 16:38:07 2022
 
 # Variables
 
@@ -27,7 +27,7 @@ WSLENV = ELECTRON_RUN_AS_NODE/w:WT_SESSION::WT_PROFILE_ID
 # automatic
 @F = $(notdir $@)
 # makefile
-CURDIR := /mnt/c/Users/daucr/Desktop/epita/sit/Advanced OS and Virtualization/disassembler
+CURDIR := /mnt/c/Users/daucr/Desktop/epita/sit/Advanced OS and Virtualization/intrp
 # makefile
 SHELL = /bin/sh
 # environment
@@ -51,7 +51,7 @@ PATH = /home/dylou/.vscode-server/bin/b06ae3b2d2dbfe28bca3134cc6be65935cdfea6a/b
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-668f3802-42fb-4077-9beb-45809bf08c4f.sock
+VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-28fa7266-de6e-4ca5-be05-ab644524cba0.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -61,13 +61,13 @@ LS_COLORS = rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:
 # environment
 DISPLAY = 172.29.192.1:0
 # environment
-PWD = /mnt/c/Users/daucr/Desktop/epita/sit/Advanced OS and Virtualization/disassembler
+PWD = /mnt/c/Users/daucr/Desktop/epita/sit/Advanced OS and Virtualization/intrp
 # default
 .LOADED := 
 # environment
 WSL_INTEROP = /run/WSL/8_interop
 # environment
-WT_SESSION = 39044929-c013-47ff-8e02-0c3b2e54e553
+WT_SESSION = 77c6aaf4-1729-4d24-a57c-4f4d3d8c5ca6
 # environment
 VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
@@ -153,9 +153,9 @@ WSL_DISTRO_NAME = Ubuntu
 
 # Directories
 
-# . (device 46, inode 7599824371383544): 23 files, no impossibilities.
+# . (device 46, inode 7599824371383544): 25 files, no impossibilities.
 
-# 23 files, no impossibilities in 1 directories.
+# 25 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -163,7 +163,7 @@ WSL_DISTRO_NAME = Ubuntu
 
 # Files
 
-all: main
+all: intrp
 #  Command line target.
 #  Implicit rule search has been done.
 #  File does not exist.
@@ -176,16 +176,23 @@ all: main
 
 # Not a target:
 basics.o:
-#  Implicit rule search has been done.
-#  File does not exist.
+#  Implicit rule search has not been done.
+#  Modification time never checked.
 #  File has not been updated.
 
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-07-16 19:47:41.8056592
+#  Last modified 2022-07-18 16:37:40.0448448
 #  File has been updated.
 #  Successfully updated.
+
+intrp: syscall.o basics.o operations.o tools.o parser.o main.o
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 4):
+	gcc $^ -o intrp
 
 # Not a target:
 parser.o:
@@ -199,24 +206,25 @@ parser.o:
 #  Modification time never checked.
 #  File has not been updated.
 
+# Not a target:
+syscall.o:
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has not been updated.
+
 clean:
 #  Phony target (prerequisite of .PHONY).
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 8):
+#  recipe to execute (from 'Makefile', line 9):
 	$(RM) *.o
-	$(RM) main0
+	$(RM) intrp
 
 # Not a target:
 operations.o:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
-#  File has not been updated.
-
-main: basics.o operations.o tools.o parser.o main.o
-#  Implicit rule search has been done.
-#  Last modified 2022-07-17 03:36:40.6515109
 #  File has not been updated.
 
 # Not a target:
@@ -232,19 +240,19 @@ tools.o:
 #  File has not been updated.
 
 # files hash-table stats:
-# Load=12/1024=1%, Rehash=0, Collisions=0/32=0%
+# Load=13/1024=1%, Rehash=0, Collisions=0/34=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 35 / storage = 301 B / avg = 8 B
-# current buf: size = 8162 B / used = 301 B / count = 35 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 39 / storage = 339 B / avg = 8 B
+# current buf: size = 8162 B / used = 339 B / count = 39 / avg = 8 B
 
-# strcache performance: lookups = 47 / hit rate = 25%
+# strcache performance: lookups = 50 / hit rate = 22%
 # hash-table stats:
-# Load=35/8192=0%, Rehash=0, Collisions=2/47=4%
-# Finished Make data base on Sun Jul 17 11:46:35 2022
+# Load=39/8192=0%, Rehash=0, Collisions=2/50=4%
+# Finished Make data base on Mon Jul 18 16:38:07 2022
 
  

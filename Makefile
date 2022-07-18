@@ -1,9 +1,10 @@
-all: main
+all: intrp
 
-main: basics.o operations.o tools.o parser.o main.o
+intrp: syscall.o basics.o operations.o tools.o parser.o main.o
+	gcc $^ -o intrp
 
 .PHONY: clean
 
 clean:
 	$(RM) *.o
-	$(RM) main0
+	$(RM) intrp

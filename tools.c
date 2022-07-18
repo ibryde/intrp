@@ -7,6 +7,7 @@
 #include <stdlib.h>
 
 #include "./tools.h"
+#include "./type.h"
 
 char* reg[] = {
     "al", "cl", "dl", "bl", "ah", "ch", "dh", "bh",
@@ -99,4 +100,147 @@ void spacebar(size_t nb_bytes){
     for (size_t i = 0; i < nb_spaces; i++){
         printf("  ");
     }
+}
+
+void spacebar_debug(size_t nb_bytes){
+    size_t nb_spaces = 13 - (nb_bytes*2);
+    for (size_t i = 0; i < nb_spaces; i++){
+        printf(" ");
+    }
+}
+
+/// Get the reg
+void* get_reg(struct CPU* cpu, uint8_t _reg){
+    uint8_t* ptr;
+    switch(_reg){
+        case 0: // w = 0 and reg = 000;
+            return (void*) &(cpu->AX);
+        case 1: // w = 0 and reg = 001;
+            return (void*) &(cpu->CX);
+        case 2: // w = 0 and reg = 010;
+            return (void*) &(cpu->DX);
+        case 3: // w = 0 and reg = 011;
+            return (void*) &(cpu->BX);
+        case 4: // w = 0 and reg = 100;
+            ptr = (uint8_t*) &(cpu->AX);
+            ptr++;
+            return (void *) ptr;
+        case 5: // w = 0 and reg = 101;
+            ptr = (uint8_t*) &(cpu->CX);
+            ptr++;
+            return (void *) ptr;
+        case 6: // w = 0 and reg = 110;
+            ptr = (uint8_t*) &(cpu->DX);
+            ptr++;
+            return (void *) ptr;
+        case 7: // w = 0 and reg = 111;
+            ptr = (uint8_t*) &(cpu->BX);
+            ptr++;
+            return (void *) ptr;
+        case 8: // w = 1 and reg = 000;
+            return (void*) &(cpu->AX);
+        case 9: // w = 1 and reg = 001;
+            return (void*) &(cpu->CX);
+        case 10: // w = 1 and reg = 01;
+            return (void*) &(cpu->DX);
+        case 11: // w = 1 and reg = 01;
+            return (void*) &(cpu->BX);
+        case 12: // w = 1 and reg = 10;
+            return (void*) &(cpu->SP);
+        case 13: // w = 1 and reg = 10;
+            return (void*) &(cpu->BP);
+        case 14: // w = 1 and reg = 11;
+            return (void*) &(cpu->SI);
+        default: // w = 1 and reg = 11;
+            return (void*) &(cpu->DI);
+    }
+}
+
+
+/// Get the effective adress with the rm
+uint32_t get_memory(struct CPU* cpu, uint8_t _rm, int16_t disp){
+    uint32_t ptr;
+    switch(_rm){
+        case 0: //bx+si
+            ptr = cpu->BX + cpu->SI + disp;
+            break;
+        case 1: //bx+di
+            ptr = cpu->BX + cpu->DI + disp;
+            break;
+        case 2: //bp+si
+            ptr = cpu->BP + cpu->SI + disp;
+            break;
+        case 3: //bp+di
+            ptr = cpu->BP + cpu->DI + disp;
+            break;
+        case 4: //si
+            ptr = cpu->SI + disp;
+            break;
+        case 5: //di
+            ptr = cpu->DI + disp;
+            break;
+        case 6: //bp
+            ptr = cpu->BP + disp;
+            break;
+        case 7: //bx
+            ptr = cpu->BX + disp;
+            break;
+        default: // ea = disp
+            ptr = disp;
+            break;
+    }
+    return ptr;
+}
+
+/// Get the effective adress with the rm
+void* get_ea(struct CPU* cpu, uint8_t _rm, int16_t disp){
+    return (void*) &(cpu->memory[get_memory(cpu, _rm, disp)]);
+}
+
+uint16_t get_value(uint8_t* buffer, uint16_t i, struct CPU* cpu, uint8_t _mod, uint8_t _rm){
+    if (_mod == 3)
+        return 0;
+        
+    int16_t disp = 0;
+    switch(_mod){
+        case 0: // (_rm = 6)? disp = 0 : ea = disp
+            if (_rm == 6){
+                disp = (((int16_t) buffer[i+3]) << 8) + ((int16_t) buffer[i+2]);
+                _rm = 8;
+            }
+            break;
+        case 1:
+            disp = (int8_t) buffer[i+2];
+            break;
+        default:
+            disp = (((int16_t) buffer[i+3]) << 8) + ((int16_t) buffer[i+2]);
+            break;
+    }
+
+    return get_memory(cpu, _rm, disp);
+}
+
+/// Memory update for the debug mod
+void memory_update(uint8_t* buffer, uint16_t i, struct CPU* cpu, uint8_t _mod, uint8_t _rm){
+    if (_mod == 3)
+        return;
+        
+    int16_t disp = 0;
+    switch(_mod){
+        case 0: // (_rm = 6)? disp = 0 : ea = disp
+            if (_rm == 6){
+                disp = (((int16_t) buffer[i+3]) << 8) + ((int16_t) buffer[i+2]);
+                _rm = 8;
+            }
+            break;
+        case 1:
+            disp = (int8_t) buffer[i+2];
+            break;
+        default:
+            disp = (((int16_t) buffer[i+3]) << 8) + ((int16_t) buffer[i+2]);
+            break;
+    }
+
+    uint16_t value = get_memory(cpu, _rm, disp);
+    printf(" ;[%04hx]%04hx", value, WORD(value));
 }
