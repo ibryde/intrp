@@ -55,6 +55,6 @@ void* get_ea(struct CPU* cpu, uint8_t _rm, int16_t disp);
 
 uint16_t get_value(uint8_t* buffer, uint16_t i, struct CPU* cpu, uint8_t _mod, uint8_t _rm);
 
-void memory_update(uint8_t* buffer, uint16_t i, struct CPU* cpu, uint8_t _mod, uint8_t _rm);
+void memory_update(uint8_t* buffer, uint16_t i, struct CPU* cpu, struct infos* k);
 
 #endif

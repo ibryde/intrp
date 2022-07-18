@@ -57,7 +57,7 @@ char* dispstr(char* s, int16_t disp){
 
     for (int16_t temp = disp_abs; temp >= 16; i++)
         temp /= 16;
-    // printf("\ndisp = %x ; i = %u", disp, i);
+    // fprintf(stderr, "\ndisp = %x ; i = %u", disp, i);
     char* res = calloc(l + 2 + i, sizeof(char));
     // 1 + ... cause we count the length of the sign
     for (size_t j = 0; j < l; j++)
@@ -98,14 +98,14 @@ void spacebar(size_t nb_bytes){
     size_t nb_spaces = 7 - (nb_bytes);
     // x2 : A byte is represented by 2 hex number
     for (size_t i = 0; i < nb_spaces; i++){
-        printf("  ");
+        fprintf(stderr, "  ");
     }
 }
 
 void spacebar_debug(size_t nb_bytes){
     size_t nb_spaces = 13 - (nb_bytes*2);
     for (size_t i = 0; i < nb_spaces; i++){
-        printf(" ");
+        fprintf(stderr, " ");
     }
 }
 
@@ -221,16 +221,16 @@ uint16_t get_value(uint8_t* buffer, uint16_t i, struct CPU* cpu, uint8_t _mod, u
 }
 
 /// Memory update for the debug mod
-void memory_update(uint8_t* buffer, uint16_t i, struct CPU* cpu, uint8_t _mod, uint8_t _rm){
-    if (_mod == 3)
+void memory_update(uint8_t* buffer, uint16_t i, struct CPU* cpu, struct infos* k){
+    if (k->_mod == 3)
         return;
         
     int16_t disp = 0;
-    switch(_mod){
+    switch(k->_mod){
         case 0: // (_rm = 6)? disp = 0 : ea = disp
-            if (_rm == 6){
+            if (k->_rm == 6){
                 disp = (((int16_t) buffer[i+3]) << 8) + ((int16_t) buffer[i+2]);
-                _rm = 8;
+                k->_rm = 8;
             }
             break;
         case 1:
@@ -241,6 +241,9 @@ void memory_update(uint8_t* buffer, uint16_t i, struct CPU* cpu, uint8_t _mod, u
             break;
     }
 
-    uint16_t value = get_memory(cpu, _rm, disp);
-    printf(" ;[%04hx]%04hx", value, WORD(value));
+    uint16_t value = get_memory(cpu, k->_rm, disp);
+    if(k->w == 1)
+        fprintf(stderr, " ;[%04hx]%04hx", value, WORD(value));
+    else
+        fprintf(stderr, " ;[%04hx]%02hhx", value, WORD(value));
 }

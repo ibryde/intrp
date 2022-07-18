@@ -1,13 +1,5 @@
 make --dry-run --keep-going --print-directory
 make: Entering directory '/mnt/c/Users/daucr/Desktop/epita/sit/Advanced OS and Virtualization/intrp'
-cc    -c -o syscall.o syscall.c
- 
-cc    -c -o basics.o basics.c
-cc    -c -o operations.o operations.c
-cc    -c -o tools.o tools.c
- 
-cc    -c -o parser.o parser.c
-cc    -c -o main.o main.c
-gcc syscall.o basics.o operations.o tools.o parser.o main.o -o intrp
+make: Nothing to be done for 'all'.
 make: Leaving directory '/mnt/c/Users/daucr/Desktop/epita/sit/Advanced OS and Virtualization/intrp'
  

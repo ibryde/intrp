@@ -21,6 +21,8 @@ void op_sbb(struct CPU* cpu, void* src, void* des, uint8_t size);
 
 void op_and(struct CPU* cpu, void* src, void* des, uint8_t size);
 
+void op_testadd(struct CPU* cpu, void* src, void* des, uint8_t size);
+
 void op_sub(struct CPU* cpu, void* src, void* des, uint8_t size);
 
 void op_xor(struct CPU* cpu, void* src, void* des, uint8_t size);
@@ -33,17 +35,19 @@ void op_mov(struct CPU* cpu, void* src, void* des, uint8_t size);
 
 uint8_t op_test(struct CPU* cpu, uint8_t* buffer, uint16_t i, struct infos* k);
 
-void op_not();
 
-void op_neg();
+void op_not(struct CPU* cpu, void* des, uint8_t size);
 
-void op_mul();
+void op_neg(struct CPU* cpu, void* des, uint8_t size);
 
-void op_imul();
+void op_mul(struct CPU* cpu, void* des, uint8_t size);
 
-void op_div();
+void op_imul(struct CPU* cpu, void* des, uint8_t size);
 
-void op_idiv();
+void op_div(struct CPU* cpu, void* des, uint8_t size);
+
+void op_idiv(struct CPU* cpu, void* des, uint8_t size);
+
 
 void op_call();
 
@@ -51,19 +55,20 @@ void op_jmp();
 
 void op_push();
 
-void op_rol();
 
-void op_ror();
+void op_rol(struct CPU* cpu, void* src, void* des, uint8_t size);
 
-void op_rcl();
+void op_ror(struct CPU* cpu, void* src, void* des, uint8_t size);
 
-void op_rcr();
+void op_rcl(struct CPU* cpu, void* src, void* des, uint8_t size);
 
-void op_shl();
+void op_rcr(struct CPU* cpu, void* src, void* des, uint8_t size);
 
-void op_shr();
+void op_shl(struct CPU* cpu, void* src, void* des, uint8_t size);
 
-void op_sar();
+void op_shr(struct CPU* cpu, void* src, void* des, uint8_t size);
+
+void op_sar(struct CPU* cpu, void* src, void* des, uint8_t size);
 
 uint8_t mod_switch(uint8_t* buffer, uint16_t i, struct CPU* cpu, uint8_t _mod,
                     uint8_t _rm, char **str, uint8_t _reg, void** value);

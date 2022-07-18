@@ -36,10 +36,10 @@ void parser(int fd, uint8_t mode){
 
     uint16_t i = 0;
     
-    if (cpu->mode == DEBUG) printf(" AX   BX   CX   DX   SP   BP   SI   DI  FLAGS IP\n");
+    if (cpu->mode == DEBUG) fprintf(stderr, " AX   BX   CX   DX   SP   BP   SI   DI  FLAGS IP\n");
 
     while(i < head.a_text){
-        if (cpu->mode == DEBUG) printf("%04hx %04hx %04hx %04hx %04hx %04hx %04hx %04hx %c%c%c%c ",  
+        if (cpu->mode == DEBUG) fprintf(stderr, "%04hx %04hx %04hx %04hx %04hx %04hx %04hx %04hx %c%c%c%c ",  
                 cpu->AX, cpu->BX, cpu->CX, cpu->DX,
                 cpu->SP, cpu->BP, cpu->SI, cpu->DI,
                 (cpu->_o == 0)? '-' : 'O',
@@ -49,21 +49,23 @@ void parser(int fd, uint8_t mode){
 
         if (i+1 >= head.a_text){
             if (cpu->mode == DISASSEMBLY ||
-                cpu->mode == DEBUG) printf("%04x: 00            (undefined)\n", i);
+                cpu->mode == DEBUG) fprintf(stderr, "%04x: 00            (undefined)\n", i);
             break;
         }
 
-        if (cpu->mode == DISASSEMBLY) printf("%04x: ", i);
-        if (cpu->mode == DEBUG) printf("%04x:", i);
+        if (cpu->mode == DISASSEMBLY) fprintf(stderr, "%04x: ", i);
+        if (cpu->mode == DEBUG) fprintf(stderr, "%04x:", i);
 
         fflush(stdout);
 
         i += op[buffer[i]](&buffer, i, cpu);
 
         if (cpu->mode == DISASSEMBLY ||
-            cpu->mode == DEBUG) printf("\n");
+            cpu->mode == DEBUG) fprintf(stderr, "\n");
         
-        // printf("[%04hx]%04hx\n", 0xffb2, WORD(0xffb2));
+        /// for (uint16_t j = 0xffdc; j > 0xff96; j -= 2)
+        ///     fprintf(stderr, "%04hx ", WORD(j));
+        /// fprintf(stderr, "\n");
         
         if (cpu->end_process && (cpu->mode == INTERPRETER || cpu->mode == DEBUG))
             break;
